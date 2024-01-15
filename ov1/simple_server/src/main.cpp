@@ -1,18 +1,46 @@
 #include <Arduino.h>
 
+#include <WiFi.h>
+
+const char* ssid = "NTNU-IOT";
+const char* password = "";
+
+
+
+
+
 // put function declarations here:
-int myFunction(int, int);
+void connectWiFi();
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  connectWiFi();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  if(WiFi.status() != WL_CONNECTED)
+  {
+    Serial.println("Lost connection:");
+    connectWiFi();
+  }
+
+
+
+
+
+
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+
+void connectWiFi()
+{
+  Serial.println("Connecting to wifi");
+  WiFi.begin(ssid, password);
+  while(WiFi.status() != WL_CONNECTED)
+  {
+    delay(1000);
+    Serial.print(".");
+  }
+  String localWiFi = String(WiFi.localIP());
+  Serial.println("Successfully connected to" + localWiFi);
 }
